@@ -1,0 +1,13 @@
+[ignore]
+.*/public
+
+[include]
+
+[libs]
+./flow
+
+[lints]
+
+[options]
+
+[strict]
