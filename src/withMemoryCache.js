@@ -1,5 +1,5 @@
 // @flow
-import invariant from 'invariant'
+import invariant from './invariant.js'
 
 type AsyncFunction = () => Promise<*>
 
@@ -9,10 +9,10 @@ export default (fn: AsyncFunction, key: string): AsyncFunction => {
   return (...args) => { // TODO remove ...args
     if (CACHE[key]) return Promise.resolve(CACHE[key])
     return fn(...args)
-          .then(res => {
-            CACHE[key] = res
-            return res
-          })
+      .then(res => {
+        CACHE[key] = res
+        return res
+      })
   }
 }
 

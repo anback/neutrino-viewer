@@ -1,6 +1,7 @@
 // @flow
 /* eslint-disable no-unused-vars */
 declare var TradingView : any
+declare var moment : any
 
 type Quote = {
   bid: number,

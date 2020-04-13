@@ -1,5 +1,7 @@
 [ignore]
 .*/public
+.*/node_modules
+.*/src/PolygonTickers.json
 
 [include]
 

@@ -10,7 +10,9 @@
     ],
     "globals": {
         "Atomics": "readonly",
-        "SharedArrayBuffer": "readonly"
+        "SharedArrayBuffer": "readonly",
+        "TradingView": "readonly",
+        "moment": "readonly"
     },
     "parserOptions": {
         "ecmaVersion": 2018,

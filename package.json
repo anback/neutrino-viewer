@@ -4,15 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "postinstall": "cp -r ./node_modules/charting_library/charting_library ./public/charting_library",
     "build": "babel src -d public --copy-files > /dev/null",
-    "serve": "serve public"
+    "browserify": "browserify src/index.js > public/bundle.js",
+    "serve": "npm run build && serve public"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "invariant": "^2.2.4",
-    "moment": "^2.24.0",
-    "serve": "^11.3.0"
+    "browserify": "^16.5.1",
+    "charting_library": "https://github.com/tradingview/charting_library.git",
+    "moment": "^2.24.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
@@ -26,6 +28,7 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.1",
     "eslint-plugin-flowtype": "^4.7.0",
-    "eslint-plugin-header": "^3.0.0"
+    "eslint-plugin-header": "^3.0.0",
+    "serve": "^11.3.0"
   }
 }
