@@ -12,7 +12,9 @@
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly",
         "TradingView": "readonly",
-        "moment": "readonly"
+        "moment": "readonly",
+        "describe": "readonly",
+        "it": "readonly"
     },
     "parserOptions": {
         "ecmaVersion": 2018,
@@ -33,6 +35,7 @@
         "indent":"error",
         "header/header": [2, "line", [" @flow"]],
         "camelcase": 0,
-        "flowtype/define-flow-type": 1
+        "flowtype/define-flow-type": 1,
+        "import/extensions": ["error", "always"]
     }
 }

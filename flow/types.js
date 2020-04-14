@@ -2,6 +2,8 @@
 /* eslint-disable no-unused-vars */
 declare var TradingView : any
 declare var moment : any
+declare var describe : any
+declare var it : any
 
 type Quote = {
   bid: number,

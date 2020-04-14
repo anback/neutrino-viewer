@@ -1,5 +1,4 @@
 // @flow
-import withMemoryCache from './withMemoryCache.js'
 import { getQuotesForIdentifier, getTickers } from './ApiHandler.js'
 
 type ResolutionString = '1D'
@@ -21,7 +20,6 @@ const TIME_ZONE = 'Etc/UTC'
 const SESSION = '0930-1600'
 const exchanges = ['AMX', 'ARCA', 'BATS', 'NYE', 'NSD', 'NGS'].map(exchange => ({ name: exchange, value: exchange, desc: exchange }))
 const CONFIG = { supported_resolutions: SUPPORTED_RESOLUTIONS, exchanges, symbols_types: ['STOCKS'].map(value => ({ name: value, value })) }
-const getBarsForIdentifier = (identifer: string) => withMemoryCache(() => getQuotesForIdentifier(identifer), identifer)()
 
 export default {
   onReady: (callback: Function) => { console.log('TradingViewDataFeed onReady'); setTimeout(() => callback(CONFIG)) },
@@ -32,8 +30,8 @@ export default {
         const res =
         tickers
           .reduce((a, polygonTicker: PolygonTicker) => {
-            const { ticker: symbol, name: full_name, primaryExch: exchange, market: type } = polygonTicker
-            if (symbol.includes(userInput) || full_name.includes(userInput)) a.push({ symbol, full_name, description: '', exchange, type })
+            const { ticker: symbol, name: description, primaryExch: exchange, market: type } = polygonTicker
+            if (symbol.includes(userInput)) a.push({ symbol, full_name: symbol, description, exchange, type })
             return a
           }, [])
 
@@ -46,13 +44,14 @@ export default {
     getTickers()
       .then(tickers => {
         const polygonTicker = tickers.find(({ ticker }) => ticker === symbolName)
-        if (!polygonTicker) return onError(`Cant find symbol info for ticker: ${symbolName}`)
-        const { name, ticker, primaryExch: exchange, currency: currency_code, market: type } = polygonTicker
+        if (!polygonTicker) throw new Error(`Cant find symbol info for ticker: ${symbolName}`)
+        const { ticker, name: description, primaryExch: exchange, currency: currency_code, market: type } = polygonTicker
+
         onResolve({
-          name,
-          full_name: name,
+          name: ticker,
+          full_name: ticker,
           ticker,
-          description: '',
+          description,
           type,
           session: SESSION,
           exchange,
@@ -65,10 +64,11 @@ export default {
           currency_code
         })
       })
+      .catch(createErrorCallback(onError))
   },
   getBars: ({ ticker }: LibrarySymbolInfo, resolution: ResolutionString, rangeStartDate: number, rangeEndDate: number, onResult: HistoryCallback, onError: ErrorCallback, isFirstCall: boolean): void => {
     console.log('TradingViewDataFeed', 'getBars', 'resolution', resolution, 'rangeStartDate', moment(rangeStartDate).format(), 'rangeEndDate', moment(rangeEndDate).format(), 'isFirstCall', isFirstCall)
-    getBarsForIdentifier(ticker)
+    getQuotesForIdentifier(ticker)
       .then(quotes => {
         const startDate = moment(rangeStartDate)
         const endDate = moment(rangeEndDate)
@@ -82,9 +82,15 @@ export default {
         const meta = { noData: quotes.length === 0 }
         onResult(bars, meta)
       })
-      .catch(err => onError(err.message + err.stack))
+      .catch(createErrorCallback(onError))
   },
 
   subscribeBars: (symbolInfo: LibrarySymbolInfo, resolution: ResolutionString, onTick: SubscribeBarsCallback, listenerGuid: string, onResetCacheNeededCallback: () => void): void => {},
   unsubscribeBars: (listenerGuid: string): void => {}
+}
+
+const createErrorCallback = (onError: Function) => (err: Error) => {
+  const errMessage = err.message + err.stack
+  console.error(errMessage)
+  onError(errMessage)
 }

@@ -1,5 +1,6 @@
 // @flow
 import TradingViewDataFeed from './TradingViewDataFeed.js'
+import { getTickers } from './ApiHandler.js'
 
 // eslint-disable-next-line new-cap
 window.tvWidget = new TradingView.widget({
@@ -10,3 +11,6 @@ window.tvWidget = new TradingView.widget({
   datafeed: TradingViewDataFeed,
   library_path: './charting_library/'
 })
+
+// set tickers in cache
+getTickers()
