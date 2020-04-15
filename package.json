@@ -7,7 +7,7 @@
     "postinstall": "cp -r ./node_modules/charting_library/charting_library ./public/charting_library",
     "build": "babel src -d public --copy-files > /dev/null",
     "browserify": "browserify src/index.js > public/bundle.js",
-    "serve": "npm run build && serve public"
+    "start": "npm run build && serve public"
   },
   "author": "",
   "license": "ISC",
