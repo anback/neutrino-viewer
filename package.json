@@ -14,7 +14,7 @@
   "dependencies": {
     "browserify": "^16.5.1",
     "charting_library": "https://github.com/tradingview/charting_library.git",
-    "moment": "^2.24.0"
+    "moment": "^2.29.4"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
